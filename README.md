@@ -2,7 +2,7 @@
 
 Welcome to the GitHub repository for the CQF (Certificate in Quantitative Finance) June cohort of 2023! This repository has been created to foster collaboration and facilitate discussions among participants regarding Python code used in the CQF course.
 
-## Browse Notebooks - credit to [@wojciechfrys] (https://github.com/wojciechfrys)
+## Browse Notebooks - credit to [@wojciechfrys](https://github.com/wojciechfrys)
 
 GitHub displays the bare minimum of the notebooks output. To see more, like charts, you need to use the nbviewer and paste the GitHub link there.
 
