@@ -2,6 +2,12 @@
 
 Welcome to the GitHub repository for the CQF (Certificate in Quantitative Finance) June cohort of 2023! This repository has been created to foster collaboration and facilitate discussions among participants regarding Python code used in the CQF course.
 
+## Browse Notebooks - credit to @wojciechfrys
+
+GitHub displays the bare minimum of the notebooks output. To see more, like charts, you need to use the nbviewer and paste the GitHub link there.
+
+Click [here](https://nbviewer.org/github/wojciechfrys/CQF_Labs/tree/master/) to see the repo under nbviewer.
+
 ## Instructions for Python Code Contributions
 
 1. **Python Lab Code**: Please save any Python code related to the CQF course's labs in the `pythonlab` folder. This directory is specifically designated for storing Python code related to practical labs and exercises.
