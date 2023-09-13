@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np 
 
-class efdm:
+class ExpEuro:
     """
     A class to calculate option values for European options using the finite-difference method.
 
