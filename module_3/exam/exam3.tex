@@ -1,0 +1,1161 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+
+    \usepackage{iftex}
+    \ifPDFTeX
+        \usepackage[T1]{fontenc}
+        \IfFileExists{alphabeta.sty}{
+              \usepackage{alphabeta}
+          }{
+              \usepackage[mathletters]{ucs}
+              \usepackage[utf8x]{inputenc}
+          }
+    \else
+        \usepackage{fontspec}
+        \usepackage{unicode-math}
+    \fi
+
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage{array}     % table support for pandoc >= 2.11.3
+    \usepackage{calc}      % table minipage width calculation for pandoc >= 2.11.1
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+
+
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{Module 3 Assignment Report}
+    \author{Bach Van Hoang Bao}
+    \date{\today}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.61,0.40,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.80,0.25,0.22}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.46,0.46,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.41,0.47,0.13}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.36,0.12}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.52,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{0.89,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb.
+    \makeatletter
+        \newbox\Wrappedcontinuationbox
+        \newbox\Wrappedvisiblespacebox
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}}
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}}
+        \newcommand*\Wrappedcontinuationindent {3ex }
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox}
+        % Take advantage of the already applied Pygments mark-up to insert
+        % potential linebreaks for TeX processing.
+        %        {, <, #, %, $, ' and ": go to next line.
+        %        _, }, ^, &, >, - and ~: stay at end of broken line.
+        % Use of \textquotesingle for straight quote.
+        \newcommand*\Wrappedbreaksatspecials {%
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}%
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}%
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}%
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}%
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}%
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}%
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}%
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}%
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}%
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}%
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}%
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}%
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}%
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}%
+        }
+        % Some characters . , ; ? ! / are not pygmentized.
+        % This macro makes them "active" and they will insert potential linebreaks
+        \newcommand*\Wrappedbreaksatpunct {%
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}%
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}%
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}%
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}%
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}%
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}%
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}%
+            \catcode`\.\active
+            \catcode`\,\active
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active
+            \lccode`\~`\~
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \section{Outline of the financial problem and numerical
+procedure}\label{outline-of-the-financial-problem-and-numerical-procedure}
+
+    \subsection{Financial Problem}\label{financial-problem}
+
+    Given the expected value of the discounted payoff under the risk-neutral
+density \(\mathbb{Q}\)
+
+\[
+V(S,t) = e^{-r(T-t)}\mathbb{E}^\mathbb{Q}[\mathbf{Payoff}(S_{T})]
+\]
+
+    Initial example data:
+
+    \[
+\begin{align*}
+\text{Today's stock price }S_{0} &= 100
+\\ 
+\text{Strike E} &= 100
+\\
+\text{Time to expiry }(T - t) &= \text{1 year}
+\\
+\text{volatility} \sigma &= 20 \%
+\\
+\text{constant risk-free interest rate }r &= 5 \%
+\end{align*}
+\]
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Importing libraries}
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Define parameters and variables}
+\PY{n}{S0} \PY{o}{=} \PY{l+m+mi}{100}
+\PY{n}{E} \PY{o}{=} \PY{l+m+mi}{100}
+\PY{n}{T} \PY{o}{=} \PY{l+m+mi}{1}
+\PY{n}{vol} \PY{o}{=} \PY{l+m+mf}{0.2}
+\PY{n}{risk\PYZus{}free\PYZus{}rate} \PY{o}{=} \PY{l+m+mf}{0.05}
+\end{Verbatim}
+\end{tcolorbox}
+
+    In this report, I will use the Monte Carlo method to simulate risk
+neutral random walk and then value the option under the risk neutral
+framework.
+
+    The pricing algorithm:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Simulate the risk-neutral random walk starting at today's value of the
+  asset over the required time horizon. This gives one realization of
+  the underlying price path.
+\item
+  For this realization calculate the option payoff.
+\item
+  Perform many more such realizations over the time horizon.
+\item
+  Calculate the average payoff over all realizations.
+\item
+  Take the present value of this average; this is the option value.
+\end{enumerate}
+
+    \subsection{Simulating path using Euler - Maruyama
+Scheme}\label{simulating-path-using-euler---maruyama-scheme}
+
+    A geometric Brownian motion with a stochastic differential equation
+(SDE) is given as: \[
+dS = r S \: dt + \sigma S \: dW
+\]
+
+    Where:
+
+\begin{itemize}
+\item
+  \(S\) is the price of the underlying
+\item
+  \(\sigma\) is constant volatility
+\item
+  \(r\) is the constant risk-free interest rate
+\item
+  \(X\) is the brownian motion.
+\end{itemize}
+
+    Consider \(V(S) = \log S\)
+
+    First order derivative:
+
+\[
+\frac{dV}{dS}= \frac{1}{S} \tag{1}
+\]
+
+Second order derivative:
+
+\[
+\frac{d^{2}V}{dS^{2}} = \frac{-1}{S^{2}} \tag{2}
+\]
+
+    Using this result for \(V = V(S,t)\) \hyperref[1]{[1]}:
+
+\[
+\begin{align*}\\
+ dV &= \left(r S \frac{dV}{dS} + \frac{1}{2} \sigma^{2} S^{2} \frac{d^{2}V}{dS^{2}} \right)dt     + \left(\sigma S \frac{dV}{dS} \right)dW
+\end{align*} \tag{3}
+\]
+
+Subtitude (1) and (2) into (3) we have:
+
+\[
+\begin{align*}
+d(\log S) &= \left(rS\left(\frac{1}{S}\right) + \frac{1}{2} \sigma^2 S^2 \left(-\frac{1}{S^2}\right) \right)dt + \sigma S \left(\frac{1}{S}\right) dW
+\\\\
+&= \left(r-\frac{1}{2} \sigma^{2}\right) d t+\sigma d W
+\end{align*}
+\]
+
+Integrating both sides between 0 and \(t\)
+
+\[
+\begin{align*}
+\int_{0}^{t} d(\log S) &= \int_{0}^{t} \left(r - \frac{1}{2} \sigma^{2}\right) d\tau + \int_{0}^{t} \sigma dW \quad (t > 0) 
+\\\\
+\log \frac{S_t}{S_0} &= \left(r - \frac{1}{2} \sigma^{2}\right) t + \sigma(W(t) - W(0))
+\end{align*}
+\]
+
+Assuming \(W (0) = 0\) and \(S (0) = S_{0}\), the exact solution
+becomes:
+
+\[
+S(t)=S_{0} \exp \left(\left(r-\frac{1}{2} \sigma^{2}\right) t+\sigma W(t)\right) \tag{4}
+\]
+
+    Using Euler - Maruyama scheme \hyperref[2]{[2]}:
+
+\[
+d S = rS \: dt + \sigma S \sqrt{dt} \: \phi
+\]
+
+where \(\phi\) is from a standardized Normal distribution. This method
+has an error of \(O(\delta t)\).
+
+Using (4) we can derive the Euler - Maruyama scheme for our problem:
+
+\[
+S_{t+ dt} = S_t \exp \left(\left(r-\frac{1}{2} \sigma^{2}\right) dt+\sigma \sqrt{d t} \: \phi \right) \tag{5}
+\]
+
+    For the random number generator for generating standard normal variable
+\(\phi\), I will use the \texttt{np.random.standard\_normal()} method.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} define simulation function}
+\PY{k}{def} \PY{n+nf}{simulate\PYZus{}path}\PY{p}{(}\PY{n}{s0}\PY{p}{,} \PY{n}{risk\PYZus{}free\PYZus{}rate}\PY{p}{,} \PY{n}{vol}\PY{p}{,} \PY{n}{horizon}\PY{p}{,} \PY{n}{timesteps}\PY{p}{,} \PY{n}{n\PYZus{}sims}\PY{p}{)}\PY{p}{:}
+    \PY{c+c1}{\PYZsh{} choose the random seed}
+    \PY{n}{seed} \PY{o}{=} \PY{l+m+mi}{2023}
+    \PY{n}{rng} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{default\PYZus{}rng}\PY{p}{(}\PY{n}{seed}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{} read the params}
+    \PY{n}{S0} \PY{o}{=} \PY{n}{s0} 
+    \PY{n}{r} \PY{o}{=} \PY{n}{risk\PYZus{}free\PYZus{}rate}
+    \PY{n}{T} \PY{o}{=} \PY{n}{horizon}
+    \PY{n}{t} \PY{o}{=} \PY{n}{timesteps}
+    \PY{n}{n} \PY{o}{=} \PY{n}{n\PYZus{}sims}
+    \PY{c+c1}{\PYZsh{} define dt}
+    \PY{n}{dt} \PY{o}{=} \PY{n}{T}\PY{o}{/}\PY{n}{t}
+    \PY{c+c1}{\PYZsh{} simulate path}
+    \PY{n}{S} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{t}\PY{p}{,}\PY{n}{n}\PY{p}{)}\PY{p}{)}
+    \PY{n}{S}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{S0}
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{t}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+        \PY{n}{w} \PY{o}{=} \PY{n}{rng}\PY{o}{.}\PY{n}{standard\PYZus{}normal}\PY{p}{(}\PY{n}{n}\PY{p}{)}
+        \PY{n}{S}\PY{p}{[}\PY{n}{i}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{S}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{*} \PY{p}{(}\PY{l+m+mi}{1}\PY{o}{+} \PY{n}{r}\PY{o}{*}\PY{n}{dt} \PY{o}{+} \PY{n}{vol}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{dt}\PY{p}{)}\PY{o}{*}\PY{n}{w}\PY{p}{)}
+    \PY{k}{return} \PY{n}{S}
+\end{Verbatim}
+\end{tcolorbox}
+
+    We will choose:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Number of paths: \texttt{100,000}
+\item
+  Time steps: \texttt{252} trading days
+\end{enumerate}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Monte Carlo parameters}
+\PY{n}{n} \PY{o}{=} \PY{l+m+mi}{100000}
+\PY{n}{t} \PY{o}{=} \PY{l+m+mi}{252}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Assign simulated price path to dataframe for analysis and plotting}
+\PY{n}{S} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{simulate\PYZus{}path}\PY{p}{(}\PY{n}{S0}\PY{p}{,}\PY{n}{risk\PYZus{}free\PYZus{}rate}\PY{p}{,}\PY{n}{vol}\PY{p}{,}\PY{n}{T}\PY{p}{,}\PY{n}{t}\PY{p}{,}\PY{n}{n}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Plot initial 100 simulated path using matplotlib}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{S}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{p}{:}\PY{l+m+mi}{100}\PY{p}{]}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{time steps}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlim}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{n}{t}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{index levels}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Monte Carlo Simulated Asset Prices}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{;}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{exam3_files/exam3_21_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsection{Exotic Options Pricing}\label{exotic-options-pricing}
+
+    Using the simulation from the previous section, I will calculate the
+payoff of the options for all realizations of the asset path. Then, I
+will take the expectation of the option price, discounted back to the
+present value.
+
+    \subsubsection{Asian Options Pricing}\label{asian-options-pricing}
+
+    An Asian option is an option where the payoff depends on the average
+price of the underlying asset over a certain period of time. Averaging
+can be either be Arithmetic or Geometric. There are two types of Payoff
+types: average rate, where averaging price is used in place of
+underlying price; and erage strike, where averaging price is used in
+place of strike \hyperref[3]{[3]}
+
+Average strike call: \[
+\max(S-A,0)
+\]
+
+Average strike put: \[
+\max(A-S,0)
+\]
+
+Average rate call: \[
+\max(A-E,0)
+\]
+
+Average rate put: \[
+\max(E-A,0)
+\]
+
+    The Average tracking variable:
+
+\[
+A_{i}= \frac{1}{i} \sum_{k=1}^{i} S\left(t_{k}\right)
+\]
+
+Where \(i\) is the total number of sampling dates.
+
+    In this function, I will use:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Payoff Type: Average rate
+\item
+  Type of Average: Athrimetic Average
+\end{enumerate}
+
+    Under the risk-neutral framework, we assume the asset is going to earn,
+on average, the risk-free interest rate. Hence, the option value at time
+t would simply be the discounted value of the expected payoff.
+
+    \textbf{The payoff of the options is given by}
+
+\[
+C(S,t) = e^{-r(T-t)}(\mathbb{E}[\max(A-E),0])
+\]
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Average price}
+\PY{n}{A} \PY{o}{=} \PY{n}{S}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+\PY{n}{C0} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{risk\PYZus{}free\PYZus{}rate}\PY{o}{*}\PY{n}{T}\PY{p}{)} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{maximum}\PY{p}{(}\PY{n}{A}\PY{o}{\PYZhy{}}\PY{n}{E}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)}
+\PY{n}{P0} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{risk\PYZus{}free\PYZus{}rate}\PY{o}{*}\PY{n}{T}\PY{p}{)} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{maximum}\PY{p}{(}\PY{n}{E}\PY{o}{\PYZhy{}}\PY{n}{A}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} Print the values}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Asian Call Option Value is }\PY{l+s+si}{\PYZob{}}\PY{n}{C0}\PY{l+s+si}{:}\PY{l+s+s2}{0.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Asian Put Option Value is }\PY{l+s+si}{\PYZob{}}\PY{n}{P0}\PY{l+s+si}{:}\PY{l+s+s2}{0.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Asian Call Option Value is 5.7603
+Asian Put Option Value is 3.3464
+    \end{Verbatim}
+
+    \subsubsection{Lookback Options Pricing}\label{lookback-options-pricing}
+
+    The lookback option has a payoff that depends on the maximum or minimum
+of the realized asset price. There are two types of payoff: The rate and
+the strike option, also called the \textbf{fixed strike} and the
+\textbf{floating strike} respectively \hyperref[4]{[4]}.
+
+    Variable \(M_{\max}\) as the realized maximum and \(M_{\min}\) as the
+realized minimum of the asset from the start of the sampling period
+\(t = 0\) until the current time \(t\):
+
+\[
+\begin{align*}
+M_{\max} &= \max_{0 \leq \tau \leq t} S(\tau)
+\\\\
+M_{\min} &= \min_{0 \leq \tau \leq t} S(\tau)
+\end{align*}
+\]
+
+    The payoff function becomes
+
+Floating strike lookback call: \[
+\max(S - M_{\min},0)
+\]
+
+Floating strike lookback put: \[
+\max( M_{\max} - S,0)
+\]
+
+Fixed strike lookback call: \[
+\max(M_{\max} - E,0)
+\]
+
+Fixed strike lookback put: \[
+\max(E - M_{\min},0)
+\]
+
+    The value of our lookback option is a function of three variables,
+\(V (S, M, t)\). In this function, I will use:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Payoff Type: Fixed strike
+\item
+  Maximum measurement: Continous
+\end{enumerate}
+
+The algorithm is to price option of each path and then calculate the
+average payoff over all realizations. Take the present value of this
+average which is the value of the option.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Tracking Variable for Maximum and Minimum}
+\PY{n}{M\PYZus{}max} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{n}{S}\PY{p}{,}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+\PY{n}{M\PYZus{}min} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{n}{S}\PY{p}{,}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} Pricing Options}
+\PY{n}{C0} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{risk\PYZus{}free\PYZus{}rate}\PY{o}{*}\PY{n}{T}\PY{p}{)} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{maximum}\PY{p}{(}\PY{n}{M\PYZus{}max}\PY{o}{\PYZhy{}}\PY{n}{E}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)}
+\PY{n}{P0} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{risk\PYZus{}free\PYZus{}rate}\PY{o}{*}\PY{n}{T}\PY{p}{)} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{maximum}\PY{p}{(}\PY{n}{E}\PY{o}{\PYZhy{}}\PY{n}{M\PYZus{}min}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} Print the values}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Lookback Call Option Value is }\PY{l+s+si}{\PYZob{}}\PY{n}{C0}\PY{l+s+si}{:}\PY{l+s+s2}{0.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Lookback Put Option Value is }\PY{l+s+si}{\PYZob{}}\PY{n}{P0}\PY{l+s+si}{:}\PY{l+s+s2}{0.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Lookback Call Option Value is 18.3002
+Lookback Put Option Value is 11.7159
+    \end{Verbatim}
+
+    \section{Varying the Initial Data}\label{varying-the-initial-data}
+
+    Using previous code for our Monte Carlo simulation and Asian options
+pricing, I will create an \texttt{asian} function to price an option
+values for different parameters.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Setting the random seed}
+\PY{n}{seed} \PY{o}{=} \PY{l+m+mi}{2023}
+\PY{n}{rng} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{default\PYZus{}rng}\PY{p}{(}\PY{n}{seed}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{asian}\PY{p}{(}\PY{n}{s0}\PY{p}{,} \PY{n}{strike}\PY{p}{,} \PY{n}{risk\PYZus{}free\PYZus{}rate}\PY{p}{,} \PY{n}{vol}\PY{p}{,} \PY{n}{horizon}\PY{p}{,} \PY{n}{timesteps}\PY{p}{,} \PY{n}{n\PYZus{}sims}\PY{p}{,} \PY{n}{option\PYZus{}type} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{C}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{:}
+    \PY{c+c1}{\PYZsh{} Euler \PYZhy{} Maruyama Scheme}
+    \PY{n}{S0} \PY{o}{=} \PY{n}{s0}
+    \PY{n}{E} \PY{o}{=} \PY{n}{strike} 
+    \PY{n}{r} \PY{o}{=} \PY{n}{risk\PYZus{}free\PYZus{}rate}
+    \PY{n}{T} \PY{o}{=} \PY{n}{horizon}
+    \PY{n}{t} \PY{o}{=} \PY{n}{timesteps}
+    \PY{n}{n} \PY{o}{=} \PY{n}{n\PYZus{}sims}
+    \PY{n}{dt} \PY{o}{=} \PY{n}{T}\PY{o}{/}\PY{n}{t}
+    \PY{n}{S} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{t}\PY{p}{,}\PY{n}{n}\PY{p}{)}\PY{p}{)}
+    \PY{n}{S}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{S0}
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{t}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+        \PY{n}{w} \PY{o}{=} \PY{n}{rng}\PY{o}{.}\PY{n}{standard\PYZus{}normal}\PY{p}{(}\PY{n}{n}\PY{p}{)}
+        \PY{n}{S}\PY{p}{[}\PY{n}{i}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{S}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{*} \PY{p}{(}\PY{l+m+mi}{1}\PY{o}{+} \PY{n}{r}\PY{o}{*}\PY{n}{dt} \PY{o}{+} \PY{n}{vol}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{dt}\PY{p}{)}\PY{o}{*}\PY{n}{w}\PY{p}{)}
+    \PY{n}{S} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{simulate\PYZus{}path}\PY{p}{(}\PY{n}{S0}\PY{p}{,}\PY{n}{risk\PYZus{}free\PYZus{}rate}\PY{p}{,}\PY{n}{vol}\PY{p}{,}\PY{n}{T}\PY{p}{,}\PY{n}{t}\PY{p}{,}\PY{n}{n}\PY{p}{)}\PY{p}{)}    \PY{c+c1}{\PYZsh{} Building a Dataframe for all simulated path}
+    \PY{c+c1}{\PYZsh{} Average price}
+    \PY{n}{A} \PY{o}{=} \PY{n}{S}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{} Option pricing Algorithm}
+    \PY{k}{if} \PY{n}{option\PYZus{}type} \PY{o}{==} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{C}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}
+        \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{r}\PY{o}{*}\PY{n}{T}\PY{p}{)} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{maximum}\PY{p}{(}\PY{n}{A}\PY{o}{\PYZhy{}}\PY{n}{E}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)}
+    \PY{k}{elif} \PY{n}{option\PYZus{}type} \PY{o}{==} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{P}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}
+        \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{r}\PY{o}{*}\PY{n}{T}\PY{p}{)} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{maximum}\PY{p}{(}\PY{n}{E}\PY{o}{\PYZhy{}}\PY{n}{A}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)}
+    \PY{k}{else}\PY{p}{:}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wrong Option Type. Use `C` for Call option and `P` for Put option.}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    And doing the same to create \texttt{lookback} function to price
+Lookback options
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{lookback}\PY{p}{(}\PY{n}{s0}\PY{p}{,} \PY{n}{strike}\PY{p}{,} \PY{n}{risk\PYZus{}free\PYZus{}rate}\PY{p}{,} \PY{n}{vol}\PY{p}{,} \PY{n}{horizon}\PY{p}{,} \PY{n}{timesteps}\PY{p}{,} \PY{n}{n\PYZus{}sims}\PY{p}{,} \PY{n}{option\PYZus{}type} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{C}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{:}
+    \PY{c+c1}{\PYZsh{} Euler \PYZhy{} Maruyama Scheme}
+    \PY{n}{S0} \PY{o}{=} \PY{n}{s0}
+    \PY{n}{E} \PY{o}{=} \PY{n}{strike}
+    \PY{n}{r} \PY{o}{=} \PY{n}{risk\PYZus{}free\PYZus{}rate}
+    \PY{n}{T} \PY{o}{=} \PY{n}{horizon}
+    \PY{n}{t} \PY{o}{=} \PY{n}{timesteps}
+    \PY{n}{n} \PY{o}{=} \PY{n}{n\PYZus{}sims}
+    \PY{n}{dt} \PY{o}{=} \PY{n}{T}\PY{o}{/}\PY{n}{t}
+    \PY{n}{S} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{t}\PY{p}{,}\PY{n}{n}\PY{p}{)}\PY{p}{)}
+    \PY{n}{S}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{S0}
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{t}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+        \PY{n}{w} \PY{o}{=} \PY{n}{rng}\PY{o}{.}\PY{n}{standard\PYZus{}normal}\PY{p}{(}\PY{n}{n}\PY{p}{)}
+        \PY{n}{S}\PY{p}{[}\PY{n}{i}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{S}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{*} \PY{p}{(}\PY{l+m+mi}{1}\PY{o}{+} \PY{n}{r}\PY{o}{*}\PY{n}{dt} \PY{o}{+} \PY{n}{vol}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{dt}\PY{p}{)}\PY{o}{*}\PY{n}{w}\PY{p}{)}
+    \PY{n}{S} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{simulate\PYZus{}path}\PY{p}{(}\PY{n}{S0}\PY{p}{,}\PY{n}{risk\PYZus{}free\PYZus{}rate}\PY{p}{,}\PY{n}{vol}\PY{p}{,}\PY{n}{T}\PY{p}{,}\PY{n}{t}\PY{p}{,}\PY{n}{n}\PY{p}{)}\PY{p}{)}    \PY{c+c1}{\PYZsh{} Building a Dataframe for all simulated path}
+    
+    \PY{c+c1}{\PYZsh{} Tracking Variable for Maximum and Minimum}
+    \PY{n}{M\PYZus{}max} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{n}{S}\PY{p}{,}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+    \PY{n}{M\PYZus{}min} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{n}{S}\PY{p}{,}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{} Discounted back to PV}
+    \PY{k}{if} \PY{n}{option\PYZus{}type} \PY{o}{==} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{C}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}
+        \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{r}\PY{o}{*}\PY{n}{T}\PY{p}{)} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{maximum}\PY{p}{(}\PY{n}{M\PYZus{}max}\PY{o}{\PYZhy{}}\PY{n}{E}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)}
+    \PY{k}{elif} \PY{n}{option\PYZus{}type} \PY{o}{==} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{P}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}
+        \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{risk\PYZus{}free\PYZus{}rate}\PY{o}{*}\PY{n}{T}\PY{p}{)} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{maximum}\PY{p}{(}\PY{n}{E}\PY{o}{\PYZhy{}}\PY{n}{M\PYZus{}min}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)}
+    \PY{k}{else}\PY{p}{:}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wrong Option Type. Use `C` for Call option and `P` for Put option.}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Testing the function with our previous results for Asian Options
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{asian}\PY{p}{(}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mf}{0.05}\PY{p}{,}\PY{l+m+mf}{0.2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{252}\PY{p}{,}\PY{l+m+mi}{100000}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{C}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{,} \PY{n}{asian}\PY{p}{(}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mf}{0.05}\PY{p}{,}\PY{l+m+mf}{0.2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{252}\PY{p}{,}\PY{l+m+mi}{100000}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{P}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+(5.760317815971038, 3.346444480615885)
+\end{Verbatim}
+\end{tcolorbox}
+        
+    And for the Lookback Options
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{lookback}\PY{p}{(}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mf}{0.05}\PY{p}{,}\PY{l+m+mf}{0.2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{252}\PY{p}{,}\PY{l+m+mi}{100000}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{C}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{,} \PY{n}{lookback}\PY{p}{(}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mf}{0.05}\PY{p}{,}\PY{l+m+mf}{0.2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{252}\PY{p}{,}\PY{l+m+mi}{100000}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{P}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+(18.300180586891152, 11.715854637463458)
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Both functions are working as expected. In the next section, I will vary
+the parameters of the functions and observe the effect on option prices.
+
+    \subsection{\texorpdfstring{Vary the Volatility
+\(\sigma\)}{Vary the Volatility \textbackslash sigma}}\label{vary-the-volatility-sigma}
+
+    Now, let's vary the volatility for three different levels:
+\(\sigma_1 = 10%
+\), \(\sigma_2 = 20%
+\), and \(\sigma_3 = 30%
+\).
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{vol\PYZus{}set} \PY{o}{=} \PY{p}{[}\PY{l+m+mf}{0.15}\PY{p}{,}\PY{l+m+mf}{0.2}\PY{p}{,}\PY{l+m+mf}{0.25}\PY{p}{]}
+\PY{n}{asian\PYZus{}calls} \PY{o}{=} \PY{p}{[}\PY{n}{asian}\PY{p}{(}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mf}{0.05}\PY{p}{,}\PY{n}{vol}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{252}\PY{p}{,}\PY{l+m+mi}{100000}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{C}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)} \PY{k}{for} \PY{n}{vol} \PY{o+ow}{in} \PY{n}{vol\PYZus{}set}\PY{p}{]}
+\PY{n}{asian\PYZus{}puts} \PY{o}{=} \PY{p}{[}\PY{n}{asian}\PY{p}{(}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mf}{0.05}\PY{p}{,}\PY{n}{vol}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{252}\PY{p}{,}\PY{l+m+mi}{100000}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{P}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)} \PY{k}{for} \PY{n}{vol} \PY{o+ow}{in} \PY{n}{vol\PYZus{}set}\PY{p}{]}
+\PY{n}{lookback\PYZus{}calls} \PY{o}{=} \PY{p}{[}\PY{n}{lookback}\PY{p}{(}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mf}{0.05}\PY{p}{,}\PY{n}{vol}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{252}\PY{p}{,}\PY{l+m+mi}{100000}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{C}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)} \PY{k}{for} \PY{n}{vol} \PY{o+ow}{in} \PY{n}{vol\PYZus{}set}\PY{p}{]}
+\PY{n}{lookback\PYZus{}puts} \PY{o}{=} \PY{p}{[}\PY{n}{lookback}\PY{p}{(}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mf}{0.05}\PY{p}{,}\PY{n}{vol}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{252}\PY{p}{,}\PY{l+m+mi}{100000}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{P}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)} \PY{k}{for} \PY{n}{vol} \PY{o+ow}{in} \PY{n}{vol\PYZus{}set}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Create a dictionary with the sets and headers}
+\PY{n}{data1} \PY{o}{=} \PY{p}{\PYZob{}}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Volatility}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{vol\PYZus{}set}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Asian Call}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{asian\PYZus{}calls}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Asian Put}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{asian\PYZus{}puts}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Lookback Call}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{lookback\PYZus{}calls}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Lookback Put}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{lookback\PYZus{}puts}
+\PY{p}{\PYZcb{}}
+\PY{c+c1}{\PYZsh{} Create a DataFrame}
+\PY{n}{df1} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{data1}\PY{p}{)}\PY{o}{.}\PY{n}{set\PYZus{}index}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Volatility}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{df1}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+            Asian Call  Asian Put  Lookback Call  Lookback Put
+Volatility
+0.15          4.683266   2.271560      14.255136      8.430421
+0.20          5.760318   3.346444      18.300181     11.715855
+0.25          6.849325   4.432830      22.482347     14.921957
+\end{Verbatim}
+\end{tcolorbox}
+        
+    It appears that both Asian and Lookback options prices increase when
+volatility rises and decrease when volatility falls. However, it seems
+that Asian options are less sensitive to changes in volatility. This
+could be due to the effect of averaging the price of the underlying,
+which mitigates the impact of sudden changes.
+
+The price of Lookback options is increasing significantly. This could be
+attributed to the high volatility that increases the probability of
+extreme prices, consequently raising the maximum value \(M_{\max}\) and
+minimum value \(M_{\min}\), thereby increasing the price of the options.
+
+    \subsection{\texorpdfstring{Vary the inital stock price
+\(S_0\)}{Vary the inital stock price S\_0}}\label{vary-the-inital-stock-price-s_0}
+
+    Let's vary the initial stock price at three different levels: 90, 100,
+and 110.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{S0\PYZus{}set} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{90}\PY{p}{,}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mi}{110}\PY{p}{]}
+\PY{n}{asian\PYZus{}calls} \PY{o}{=} \PY{p}{[}\PY{n}{asian}\PY{p}{(}\PY{n}{S0}\PY{p}{,}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mf}{0.05}\PY{p}{,}\PY{l+m+mf}{0.2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{252}\PY{p}{,}\PY{l+m+mi}{100000}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{C}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)} \PY{k}{for} \PY{n}{S0} \PY{o+ow}{in} \PY{n}{S0\PYZus{}set}\PY{p}{]}
+\PY{n}{asian\PYZus{}puts} \PY{o}{=} \PY{p}{[}\PY{n}{asian}\PY{p}{(}\PY{n}{S0}\PY{p}{,}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mf}{0.05}\PY{p}{,}\PY{l+m+mf}{0.2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{252}\PY{p}{,}\PY{l+m+mi}{100000}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{P}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)} \PY{k}{for} \PY{n}{S0} \PY{o+ow}{in} \PY{n}{S0\PYZus{}set}\PY{p}{]}
+\PY{n}{lookback\PYZus{}calls} \PY{o}{=} \PY{p}{[}\PY{n}{lookback}\PY{p}{(}\PY{n}{S0}\PY{p}{,}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mf}{0.05}\PY{p}{,}\PY{l+m+mf}{0.2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{252}\PY{p}{,}\PY{l+m+mi}{100000}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{C}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)} \PY{k}{for} \PY{n}{S0} \PY{o+ow}{in} \PY{n}{S0\PYZus{}set}\PY{p}{]}
+\PY{n}{lookback\PYZus{}puts} \PY{o}{=} \PY{p}{[}\PY{n}{lookback}\PY{p}{(}\PY{n}{S0}\PY{p}{,}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mf}{0.05}\PY{p}{,}\PY{l+m+mf}{0.2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{252}\PY{p}{,}\PY{l+m+mi}{100000}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{P}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)} \PY{k}{for} \PY{n}{S0} \PY{o+ow}{in} \PY{n}{S0\PYZus{}set}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Create a dictionary with the sets and headers}
+\PY{n}{data2} \PY{o}{=} \PY{p}{\PYZob{}}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{S0}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{S0\PYZus{}set}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Asian Call}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{asian\PYZus{}calls}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Asian Put}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{asian\PYZus{}puts}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Lookback Call}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{lookback\PYZus{}calls}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Lookback Put}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{lookback\PYZus{}puts}
+\PY{p}{\PYZcb{}}
+\PY{c+c1}{\PYZsh{} Create a DataFrame}
+\PY{n}{df2} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{data2}\PY{p}{)}\PY{o}{.}\PY{n}{set\PYZus{}index}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{S0}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{df2}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+     Asian Call  Asian Put  Lookback Call  Lookback Put
+S0
+90     1.562839   8.902648       8.920297     20.056563
+100    5.760318   3.346444      18.300181     11.715855
+110   13.051017   0.883462      29.642493      5.699979
+\end{Verbatim}
+\end{tcolorbox}
+        
+    The price of Out of The Money (OTM) options at \(S_0 = 90\) is
+significantly lower compared to At the Money (ATM) and In the Money
+(ITM) options, as expected. For Asian Options, the price is notably
+lower. This can be attributed to the effect of averaging the price of
+the underlying, which makes it more challenging for the average to
+increase.
+
+In the case of Lookback Options, since the payoff depends on the maximum
+and minimum of the underlying, it appears that the price of the options
+doesn't change as drastically
+
+    \subsection{\texorpdfstring{Vary the strike price
+\(E\)}{Vary the strike price E}}\label{vary-the-strike-price-e}
+
+    Let's vary the strike price at three different levels: 90, 100, and 110.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{18}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{strike\PYZus{}set} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{90}\PY{p}{,}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mi}{110}\PY{p}{]}
+\PY{n}{asian\PYZus{}calls} \PY{o}{=} \PY{p}{[}\PY{n}{asian}\PY{p}{(}\PY{l+m+mi}{100}\PY{p}{,}\PY{n}{strike}\PY{p}{,}\PY{l+m+mf}{0.05}\PY{p}{,}\PY{l+m+mf}{0.2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{252}\PY{p}{,}\PY{l+m+mi}{100000}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{C}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)} \PY{k}{for} \PY{n}{strike} \PY{o+ow}{in} \PY{n}{strike\PYZus{}set}\PY{p}{]}
+\PY{n}{asian\PYZus{}puts} \PY{o}{=} \PY{p}{[}\PY{n}{asian}\PY{p}{(}\PY{l+m+mi}{100}\PY{p}{,}\PY{n}{strike}\PY{p}{,}\PY{l+m+mf}{0.05}\PY{p}{,}\PY{l+m+mf}{0.2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{252}\PY{p}{,}\PY{l+m+mi}{100000}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{P}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)} \PY{k}{for} \PY{n}{strike} \PY{o+ow}{in} \PY{n}{strike\PYZus{}set}\PY{p}{]}
+\PY{n}{lookback\PYZus{}calls} \PY{o}{=} \PY{p}{[}\PY{n}{lookback}\PY{p}{(}\PY{l+m+mi}{100}\PY{p}{,}\PY{n}{strike}\PY{p}{,}\PY{l+m+mf}{0.05}\PY{p}{,}\PY{l+m+mf}{0.2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{252}\PY{p}{,}\PY{l+m+mi}{100000}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{C}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)} \PY{k}{for} \PY{n}{strike} \PY{o+ow}{in} \PY{n}{strike\PYZus{}set}\PY{p}{]}
+\PY{n}{lookback\PYZus{}puts} \PY{o}{=} \PY{p}{[}\PY{n}{lookback}\PY{p}{(}\PY{l+m+mi}{100}\PY{p}{,}\PY{n}{strike}\PY{p}{,}\PY{l+m+mf}{0.05}\PY{p}{,}\PY{l+m+mf}{0.2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{252}\PY{p}{,}\PY{l+m+mi}{100000}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{P}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)} \PY{k}{for} \PY{n}{strike} \PY{o+ow}{in} \PY{n}{strike\PYZus{}set}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{19}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Create a dictionary with the sets and headers}
+\PY{n}{data3} \PY{o}{=} \PY{p}{\PYZob{}}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Strike}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{strike\PYZus{}set}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Asian Call}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{asian\PYZus{}calls}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Asian Put}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{asian\PYZus{}puts}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Lookback Call}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{lookback\PYZus{}calls}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Lookback Put}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{lookback\PYZus{}puts}
+\PY{p}{\PYZcb{}}
+\PY{c+c1}{\PYZsh{} Create a DataFrame}
+\PY{n}{df3} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{data3}\PY{p}{)}\PY{o}{.}\PY{n}{set\PYZus{}index}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Strike}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{df3}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{19}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+        Asian Call  Asian Put  Lookback Call  Lookback Put
+Strike
+90       12.596374   0.670206      27.812475      4.714733
+100       5.760318   3.346444      18.300181     11.715855
+110       1.987817   9.086238      10.585264     21.228149
+\end{Verbatim}
+\end{tcolorbox}
+        
+    These results closely resemble our earlier observations when we varied
+the initial stock price data. We can still draw the same conclusions for
+both Asian Options and Lookback Options. The pricing patterns remain
+consistent, with Asian Options generally having lower prices compared to
+Lookback Options under similar parameters.
+
+    \section{Observations and problems
+encountered}\label{observations-and-problems-encountered}
+
+    \textbf{Observations:}
+
+\begin{itemize}
+\item
+  The volatility of the average stock price over time is lower than the
+  volatility of the individual stock. This results in significantly
+  lower prices for Asian Options compared to Lookback Options under the
+  same parameters. As a result, the reduction in the upfront premium in
+  an option contract tends to make Asian Options more appealing to
+  investors.
+\item
+  The price of Lookback Options is significantly higher than that of
+  Asian Options. This can be attributed to the extreme payoff structure
+  of Lookback Options, which tends to make the contracts more expensive.
+\item
+  The Risk Neutral Framework makes the pricing of these options
+  relatively straightforward, especially when using the Monte Carlo
+  Method.
+\item
+  The Euler-Maruyama Scheme is relatively easy to program, but the
+  quality of the entire algorithm depends on the quality of the
+  pseudo-random number generator (RNG) methods. To maintain consistent
+  results, I have adopted a method that creates a global numpy RNG and
+  passes the seed only once. This approach ensures ease of reproduction
+  without affecting the randomness of the results \hyperref[5]{[5]}.
+\end{itemize}
+
+    \textbf{Problems:}
+
+\begin{itemize}
+\item
+  In the Asian Options pricing function, I haven't utilized the Average
+  Strike payoff and Geometric Average sampling technique.
+\item
+  In the Lookback Options pricing function, I haven't incorporated the
+  Lookback Floating Strike Payoff and Discrete sampling technique.
+\item
+  The output of the Euler-Maruyama Scheme in (5) depends on the quality
+  of the pseudo-random number generator (RNG) for \(\phi\). I only used
+  the \texttt{np.random} method and didn't have the time to compare the
+  effects of different RNG methods on the output of our Monte Carlo
+  model.
+\item
+  The Euler-Maruyama Scheme has an error of \(O(\delta t)\). Better
+  approximations, such as the Milstein method with an error of
+  \(O(\delta t^2)\), could be implemented to improve the model.
+\end{itemize}
+
+    \section{Conclusion}\label{conclusion}
+
+    Under the risk-neutral framework, the fair value of an option is the
+present value of the expected payoff at expiry under a risk-neutral
+random walk for the underlying.
+
+\[
+V(S,t) = e^{-r(T-t)}\mathbb{E}^\mathbb{Q}[\mathbf{Payoff}(S_{T})]
+\]
+
+In this expression, we see the short-term interest rate playing two
+distinct roles. First, it is used for discounting the payoff to the
+present. This is the term \(e^{-r(T - t)}\) outside the expectation.
+Second, the return on the asset in the risk-neutral world is expected to
+be \(rS \: dt\) in a time step \(dt\).
+
+I have successfully priced Asian Options and Lookback Options using the
+Euler-Maruyama Scheme. The Monte Carlo algorithm is easy to program. The
+more simulations I use, the better accuracy I will achieve. The
+algorithm is also useful for pricing strong-path-dependent contracts,
+such as Asian Options and Lookback Options. The code is easy to
+reproduce, and I can create a Python class for later use.
+
+After pricing the options, I noticed that the price of Asian Options is
+lower compared to Lookback Options with similar parameters. I also
+observed the effect of varying the volatility and strike price on the
+option price.
+
+I believe using the Finite Difference Method for pricing these options
+should be optimal since it is well-suited for three-dimensional
+problems. If I were to do this again, I would like to try the Finite
+Difference Method and compare the results between the Monte Carlo
+Simulation and Finite Different Method.
+
+    \section{References}\label{references}
+
+    {[}1{]} Module 1 - Lecture 4,Apply Ito \(\text{III}\) for \(V = V(t,X)\)
+
+{[}2{]} Paul Wilmott on Quantitative Finance, Chapter 80, Page 1266
+
+{[}3{]} Paul Wilmott on Quantitative Finance, Chapter 25, Page 428
+
+{[}4{]} Paul Wilmott on Quantitative Finance, Chapter 26, Page 445
+
+{[}5{]} Good practices with numpy random number generators, Albert
+Thomas
+(https://albertcthomas.github.io/good-practices-random-number-generators/)
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
