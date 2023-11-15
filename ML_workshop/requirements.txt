@@ -1,0 +1,15 @@
+Boruta==0.3
+graphviz==0.17
+h5py==3.1.0
+keras==2.6.0
+keras-tuner==1.0.3
+matplotlib==3.3.3
+pandas-ta==0.3.14b
+pydot==1.4.2
+scikit-learn==1.0
+seaborn==0.11.1
+shap==0.40.0
+streamlit==0.74.1
+tensorboard==2.6.0
+tensorflow==2.6.0
+yfinance==0.1.63
